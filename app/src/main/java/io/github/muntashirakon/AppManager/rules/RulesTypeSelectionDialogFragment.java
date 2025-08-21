@@ -87,6 +87,8 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
             RuleType.PERMISSION,
     };
 
+    private static final String PREF_LAST_RULE_SELECTION = "rules_export_last_selection";
+
     private FragmentActivity mActivity;
     @Nullable
     private Uri mUri;
@@ -110,24 +112,72 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
             ruleIndexes.add(i);
         }
         mSelectedTypes = new HashSet<>(RULE_TYPES.length);
+        // Load last saved selections if available
+        List<Integer> defaultSelections = new ArrayList<>(ruleIndexes);
+        try {
+            android.content.SharedPreferences sp = requireContext().getSharedPreferences("preferences", android.content.Context.MODE_PRIVATE);
+            String saved = sp.getString(PREF_LAST_RULE_SELECTION, null);
+            if (saved != null && !saved.isEmpty()) {
+                defaultSelections.clear();
+                String[] parts = saved.split(",");
+                for (String p : parts) {
+                    int idx = Integer.parseInt(p);
+                    if (idx >= 0 && idx < RULE_TYPES.length) defaultSelections.add(idx);
+                }
+            }
+        } catch (Throwable ignore) {}
         return new SearchableMultiChoiceDialogBuilder<>(mActivity, ruleIndexes, R.array.rule_types)
                 .setTitle(mode == MODE_IMPORT ? R.string.import_options : R.string.export_options)
-                .addSelections(ruleIndexes)
+                .addSelections(defaultSelections)
                 .setPositiveButton(mode == MODE_IMPORT ? R.string.pref_import : R.string.pref_export,
                         (dialog1, which, selections) -> {
                             for (int i : selections) {
                                 mSelectedTypes.add(RULE_TYPES[i]);
                             }
+                            // Persist last selections (as CSV of indices)
+                            try {
+                                StringBuilder sb = new StringBuilder();
+                                for (int i = 0; i < selections.size(); i++) {
+                                    if (i > 0) sb.append(',');
+                                    sb.append(selections.get(i));
+                                }
+                                android.content.SharedPreferences sp = requireContext().getSharedPreferences("preferences", android.content.Context.MODE_PRIVATE);
+                                sp.edit().putString(PREF_LAST_RULE_SELECTION, sb.toString()).apply();
+                            } catch (Throwable ignore) {}
                             Log.d("TestImportExport", "Types: %s\nURI: %s", mSelectedTypes, mUri);
                             if (mActivity instanceof SettingsActivity) {
                                 ((SettingsActivity) mActivity).progressIndicator.show();
                             }
                             if (mode == MODE_IMPORT) {
                                 handleImport();
-                            } else handleExport();
+                            } else handleExportWithCtaIfUnset();
                         })
                 .setNegativeButton(getResources().getString(R.string.cancel), null)
                 .create();
+    }
+
+    private void handleExportWithCtaIfUnset() {
+        // If PathContract is enabled and SAF tree is unset, prompt user to set it first
+        if (mUri == null && Prefs.BackupRestore.usePathContract()) {
+            try {
+                androidx.documentfile.provider.DocumentFile df = io.github.muntashirakon.AppManager.di.ServiceLocator
+                        .getPathContract(requireContext())
+                        .exportsTree(requireContext());
+                if (df == null) {
+                    new com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.pref_exports_tree)
+                            .setMessage(R.string.pref_exports_tree_unset_warning)
+                            .setPositiveButton(R.string.open, (d, w) -> {
+                                // Navigate to Backup/Restore screen where export directory can be set
+                                requireActivity().startActivity(SettingsActivity.getSettingsIntent(requireContext(), "backup_restore_prefs"));
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    return;
+                }
+            } catch (Throwable ignore) {}
+        }
+        handleExport();
     }
 
     private void handleExport() {
@@ -144,9 +194,44 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
                     // Quick Export: auto-routed via PathContract or legacy fallback
                     exporter.saveRulesAutoRouted(generateRulesExportFileName());
                 }
-                ThreadUtils.postOnMainThread(() -> UIUtils.displayShortToast(R.string.the_export_was_successful));
+                ThreadUtils.postOnMainThread(() -> {
+                    UIUtils.displayShortToast(R.string.the_export_was_successful);
+                    // Offer to open the export folder when using Quick Export
+                    if (mUri == null) {
+                        try {
+                            if (Prefs.BackupRestore.usePathContract()) {
+                                androidx.documentfile.provider.DocumentFile df = io.github.muntashirakon.AppManager.di.ServiceLocator
+                                        .getPathContract(requireContext())
+                                        .exportsTree(requireContext());
+                                if (df != null) {
+                                    // Open the SAF tree
+                                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                                    intent.setData(df.getUri());
+                                    intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                    startActivity(Intent.createChooser(intent, getString(R.string.open)));
+                                    return;
+                                }
+                            }
+                            // Fallback: open legacy dir
+                            io.github.muntashirakon.io.Path base = io.github.muntashirakon.AppManager.settings.Prefs.Storage.getAppManagerDirectory();
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(base.getFileUri());
+                            startActivity(Intent.createChooser(intent, getString(R.string.open)));
+                        } catch (Throwable ignore) {
+                        }
+                    }
+                });
             } catch (IOException e) {
-                ThreadUtils.postOnMainThread(() -> UIUtils.displayLongToast(R.string.export_failed));
+                ThreadUtils.postOnMainThread(() -> {
+                    String msg = e.getMessage();
+                    if (msg != null && (msg.contains("ENOSPC") || msg.toLowerCase(java.util.Locale.ROOT).contains("space"))) {
+                        UIUtils.displayLongToast(R.string.no_space_left);
+                    } else if (msg != null && (msg.toLowerCase(java.util.Locale.ROOT).contains("permission") || msg.toLowerCase(java.util.Locale.ROOT).contains("denied"))) {
+                        UIUtils.displayLongToast(R.string.permission_denied);
+                    } else {
+                        UIUtils.displayLongToast(R.string.export_failed);
+                    }
+                });
             } finally {
                 CpuUtils.releaseWakeLock(wakeLock);
             }

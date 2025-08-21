@@ -11,7 +11,8 @@
         app:key="quick_export"
         app:title="@string/pref_quick_export"
         app:summary="@string/pref_quick_export_msg"
-        app:iconSpaceReserved="false" />
+        app:iconSpaceReserved="true"
+        app:icon="@drawable/ic_content_save" />
 
     <Preference
         app:key="import"
