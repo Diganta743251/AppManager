@@ -9,6 +9,11 @@ ext {
     // Gradle plugins
     agp_version = '8.8.0'
 
+    // Kotlin & Compose
+    kotlin_version = '2.0.21'
+    compose_bom = '2024.12.01'
+    compose_compiler_version = '1.5.15'
+
     // Library dependencies
     activity_version = "1.10.0" // Draw around the display cutouts
     androidx_core_version = "1.15.0" // Added temporarily until appcompat migrates to it

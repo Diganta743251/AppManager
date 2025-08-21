@@ -67,7 +67,7 @@ android.libraryVariants.configureEach { variant ->
             }.map { it.toString() }.collect(Collectors.toList()))
             injected.execOps.exec {
                 workingDir = project.rootDir
-                executable = file("${android.sdkDirectory.path}/build-tools/${android.buildToolsVersion}/d8")
+                executable = file("${android.sdkDirectory.path}/build-tools/${android.buildToolsVersion}/d8.bat")
                 args = buildArgs
             }
             println("Created ${amJar}")
@@ -82,7 +82,7 @@ android.libraryVariants.configureEach { variant ->
             }.map { it.toString() }.collect(Collectors.toList()))
             injected.execOps.exec {
                 workingDir = project.rootDir
-                executable = file("${android.sdkDirectory.path}/build-tools/${android.buildToolsVersion}/d8")
+                executable = file("${android.sdkDirectory.path}/build-tools/${android.buildToolsVersion}/d8.bat")
                 args = buildArgs
             }
             println("Created ${mainJar}")

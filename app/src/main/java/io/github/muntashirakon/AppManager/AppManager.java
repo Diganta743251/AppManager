@@ -11,7 +11,7 @@ import androidx.annotation.Keep;
 
 import com.topjohnwu.superuser.Shell;
 
-import org.lsposed.hiddenapibypass.HiddenApiBypass;
+// import org.lsposed.hiddenapibypass.HiddenApiBypass;
 
 import java.security.Security;
 
@@ -48,7 +48,15 @@ public class AppManager extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !Utils.isRoboUnitTest()) {
-            HiddenApiBypass.addHiddenApiExemptions("L");
+            // Avoid direct reference to HiddenApiBypass in Play flavor
+            if (io.github.muntashirakon.AppManager.FeatureGate.isHiddenApiEnabled()) {
+                try {
+                    Class<?> cls = Class.forName("org.lsposed.hiddenapibypass.HiddenApiBypass");
+                    java.lang.reflect.Method m = cls.getMethod("addHiddenApiExemptions", String[].class);
+                    m.invoke(null, (Object) new String[]{"L"});
+                } catch (Throwable ignored) {
+                }
+            }
         }
     }
 }

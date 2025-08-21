@@ -8,6 +8,12 @@
         app:iconSpaceReserved="false" />
 
     <Preference
+        app:key="quick_export"
+        app:title="@string/pref_quick_export"
+        app:summary="@string/pref_quick_export_msg"
+        app:iconSpaceReserved="false" />
+
+    <Preference
         app:key="import"
         app:title="@string/pref_import"
         app:summary="@string/pref_import_msg"

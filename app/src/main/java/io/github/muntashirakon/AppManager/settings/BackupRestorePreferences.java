@@ -109,6 +109,22 @@ public class BackupRestorePreferences extends PreferenceFragment {
                 requireContext().getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
                 startImportOperation(mImportType, treeUri, mDeleteBackupsAfterImport);
             });
+    private final ActivityResultLauncher<Intent> mSafSelectExportDirectory = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() != Activity.RESULT_OK) return;
+                Intent data = result.getData();
+                if (data == null) return;
+                Uri treeUri = data.getData();
+                if (treeUri == null) return;
+                int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                requireContext().getContentResolver().takePersistableUriPermission(treeUri, takeFlags);
+                // persist into PathContract
+                io.github.muntashirakon.AppManager.di.ServiceLocator
+                        .getPathContract(requireContext())
+                        .setExportsTreeUri(requireContext(), treeUri);
+            });
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -217,6 +233,28 @@ public class BackupRestorePreferences extends PreferenceFragment {
                     mModel.loadStorageVolumes();
                     return true;
                 });
+        // Feature flag: PathContract
+        SwitchPreferenceCompat usePathContract = Objects.requireNonNull(findPreference("use_path_contract"));
+        usePathContract.setChecked(Prefs.BackupRestore.usePathContract());
+        usePathContract.setOnPreferenceChangeListener((pref, newValue) -> {
+            Prefs.BackupRestore.setUsePathContract(Boolean.TRUE.equals(newValue));
+            return true;
+        });
+        // Exports directory via SAF
+        Preference exportsTree = Objects.requireNonNull(findPreference("exports_tree"));
+        exportsTree.setOnPreferenceClickListener(p -> {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            mSafSelectExportDirectory.launch(intent);
+            return true;
+        });
+        // Show warning if not set
+        try {
+            androidx.documentfile.provider.DocumentFile df = io.github.muntashirakon.AppManager.di.ServiceLocator
+                    .getPathContract(requireContext()).exportsTree(requireContext());
+            if (df == null) exportsTree.setSummary(getString(R.string.pref_exports_tree_unset_warning));
+        } catch (Throwable ignore) {
+        }
         // Import backups
         ((Preference) Objects.requireNonNull(findPreference("import_backups")))
                 .setOnPreferenceClickListener(preference -> {

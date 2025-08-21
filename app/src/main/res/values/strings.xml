@@ -327,6 +327,8 @@
     <string name="navigation">Navigation</string>
     <string name="touchscreen">Touchscreen</string>
     <string name="pref_export_msg">Export blocking rules configured within App Manager to external storage.</string>
+    <string name="pref_quick_export">Quick export</string>
+    <string name="pref_quick_export_msg">Export rules immediately using the configured export directory (auto-routed).</string>
     <string name="pref_import_msg">Import previously exported blocking rules from App Manager.</string>
     <string name="pref_import_watt_msg">Import blocking rules from Watt, each file containing rules for a single named package as <tt>packagename.xml</tt> etc.</string>
     <string name="pref_import_blocker_msg">Import blocking rules from Blocker, each file containing rules for a single package.</string>
@@ -815,6 +817,11 @@
     <string name="pref_backup_restore_msg">Customise backup/restore.</string>
     <string name="backup_volume">Backup volume</string>
     <string name="pref_backup_volume_msg">Select the volume or disk where the backups will be stored.</string>
+    <string name="pref_use_path_contract">Use new storage routing (beta)</string>
+    <string name="pref_use_path_contract_msg">If enabled, backups/exports use the new PathContract with SAF. Disable to fall back to legacy paths.</string>
+    <string name="pref_exports_tree">Export directory</string>
+    <string name="pref_exports_tree_msg">Choose a folder via Storage Access Framework for exports</string>
+    <string name="pref_exports_tree_unset_warning">Not set — exports will use app-private storage</string>
     <string name="no_volumes_found">Could not find any volumes with write permission.</string>
     <string name="unencrypted">Unencrypted</string>
     <string name="encrypted">Encrypted</string>

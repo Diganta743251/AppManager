@@ -65,6 +65,7 @@ public class AppPref {
         PREF_BACKUP_COMPRESSION_METHOD_STR,
         PREF_BACKUP_FLAGS_INT,
         PREF_BACKUP_VOLUME_STR,
+        PREF_USE_PATH_CONTRACT_BOOL,
 
         PREF_COMPONENTS_SORT_ORDER_INT,
         PREF_CONCURRENCY_THREAD_COUNT_INT,
@@ -390,6 +391,8 @@ public class AppPref {
             case PREF_ENABLE_PERSISTENT_SESSION_BOOL:
             case PREF_USE_SYSTEM_FONT_BOOL:
                 return false;
+            case PREF_USE_PATH_CONTRACT_BOOL:
+                return BuildConfig.DEBUG;
             case PREF_APP_OP_SHOW_DEFAULT_BOOL:
             case PREF_SHOW_DISCLAIMER_BOOL:
             case PREF_LOG_VIEWER_SHOW_PID_TID_TIMESTAMP_BOOL:

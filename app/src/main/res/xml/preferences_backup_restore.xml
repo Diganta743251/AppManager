@@ -33,6 +33,18 @@
         app:summary="@string/pref_backup_volume_msg"
         app:iconSpaceReserved="false" />
 
+    <SwitchPreferenceCompat
+        app:key="use_path_contract"
+        app:title="@string/pref_use_path_contract"
+        app:summary="@string/pref_use_path_contract_msg"
+        app:iconSpaceReserved="false" />
+
+    <Preference
+        app:key="exports_tree"
+        app:title="@string/pref_exports_tree"
+        app:summary="@string/pref_exports_tree_msg"
+        app:iconSpaceReserved="false" />
+
     <Preference
         app:key="import_backups"
         app:title="@string/pref_import_backups"

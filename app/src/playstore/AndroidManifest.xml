@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Remove risky permissions inherited from the base manifest -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:node="remove"/>
+    <uses-permission android:name="android.permission.READ_LOGS" tools:node="remove"/>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:node="remove"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:node="remove"/>
+
+    <!-- Play Store safe permissions only -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!-- Storage permissions are legacy; keep only if strictly required by features in this flavor -->
+    <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/> -->
+    <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> -->
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/PlaystoreTheme"
+        android:allowBackup="true"
+        tools:replace="android:theme">
+
+        <!-- Remove root/hidden API–related activities for Play -->
+        <activity
+            android:name="io.github.muntashirakon.AppManager.ui.activity.RootActivity"
+            tools:node="remove"/>
+        <activity
+            android:name="io.github.muntashirakon.AppManager.ui.activity.HiddenApiActivity"
+            tools:node="remove"/>
+        <activity
+            android:name="io.github.muntashirakon.AppManager.ui.activity.DebugActivity"
+            tools:node="remove"/>
+        <activity
+            android:name="io.github.muntashirakon.AppManager.ui.activity.SystemAppEditorActivity"
+            tools:node="remove"/>
+
+        <!-- Remove root/hidden API–related services for Play -->
+        <service
+            android:name="io.github.muntashirakon.AppManager.service.RootService"
+            tools:node="remove"/>
+        <service
+            android:name="io.github.muntashirakon.AppManager.service.HiddenApiService"
+            tools:node="remove"/>
+        <service
+            android:name="io.github.muntashirakon.AppManager.service.DebugLoggerService"
+            tools:node="remove"/>
+
+        <!-- Remove root/hidden API–related receivers for Play -->
+        <receiver
+            android:name="io.github.muntashirakon.AppManager.receiver.RootReceiver"
+            tools:node="remove"/>
+        <receiver
+            android:name="io.github.muntashirakon.AppManager.receiver.HiddenApiReceiver"
+            tools:node="remove"/>
+        <receiver
+            android:name="io.github.muntashirakon.AppManager.receiver.DebugReceiver"
+            tools:node="remove"/>
+    </application>
+
+    <!-- No <uses-sdk> here; controlled by Gradle -->
+</manifest>

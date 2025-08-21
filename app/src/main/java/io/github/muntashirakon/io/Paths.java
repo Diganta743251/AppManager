@@ -91,6 +91,15 @@ public final class Paths {
                 .build());
     }
 
+    /**
+     * Backwards-compatible default backups directory (legacy behavior).
+     */
+    @NonNull
+    public static Path getLegacyBackupsDir() {
+        // Uses existing Prefs.Storage.getAppManagerDirectory
+        return io.github.muntashirakon.AppManager.settings.Prefs.Storage.getAppManagerDirectory();
+    }
+
     @NonNull
     public static Path getUnprivileged(@NonNull File pathName) {
         Path path = null;

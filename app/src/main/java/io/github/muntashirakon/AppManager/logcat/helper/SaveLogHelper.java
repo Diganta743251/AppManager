@@ -162,6 +162,18 @@ public class SaveLogHelper {
 
     @NonNull
     private static Path getSavedLogsDirectory() throws IOException {
+        if (Prefs.BackupRestore.usePathContract()) {
+            androidx.documentfile.provider.DocumentFile tree = io.github.muntashirakon.AppManager.di.ServiceLocator
+                    .getPathContract(io.github.muntashirakon.AppManager.utils.ContextUtils.getContext())
+                    .exportsTree(io.github.muntashirakon.AppManager.utils.ContextUtils.getContext());
+            if (tree != null) {
+                Path base = Paths.get(tree.getUri());
+                return base.findOrCreateDirectory(SAVED_LOGS_DIR);
+            } else {
+                // Warn once per call path; fallback to legacy
+                UIUtils.displayShortToast(R.string.pref_exports_tree_unset_warning);
+            }
+        }
         Path amDir = Prefs.Storage.getAppManagerDirectory();
         if (!amDir.exists()) {
             amDir.mkdir();

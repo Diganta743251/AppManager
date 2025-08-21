@@ -53,4 +53,52 @@ public class RulesExporter {
             }
         }
     }
+
+    /**
+     * Write rules to a file path chosen by contract routing.
+     * If flag is ON and SAF tree set, writes there; otherwise falls back to legacy dir.
+     */
+    public void saveRulesAutoRouted(@NonNull String fileName) throws IOException {
+        java.io.File target;
+        if (io.github.muntashirakon.AppManager.settings.Prefs.BackupRestore.usePathContract()) {
+            androidx.documentfile.provider.DocumentFile tree = io.github.muntashirakon.AppManager.di.ServiceLocator
+                    .getPathContract(mContext)
+                    .exportsTree(mContext);
+            if (tree != null) {
+                // Create/replace child in SAF tree
+                androidx.documentfile.provider.DocumentFile child = tree.findFile(fileName);
+                if (child != null) child.delete();
+                child = tree.createFile("text/tab-separated-values", fileName);
+                if (child == null) throw new IOException("Could not create export file in SAF tree.");
+                Uri dest = child.getUri();
+                try (OutputStream outputStream = mContext.getContentResolver().openOutputStream(dest)) {
+                    if (mPackagesToExport == null) mPackagesToExport = ComponentUtils.getAllPackagesWithRules(mContext);
+                    if (outputStream == null) throw new IOException("Content provider has crashed.");
+                    for (String packageName: mPackagesToExport) {
+                        for (int userHandle : mUserIds) {
+                            try (ComponentsBlocker cb = ComponentsBlocker.getInstance(packageName, userHandle)) {
+                                ComponentUtils.storeRules(outputStream, cb.getAll(mTypesToExport), true);
+                            }
+                        }
+                    }
+                }
+                return;
+            } else {
+                io.github.muntashirakon.AppManager.utils.UIUtils.displayShortToast(io.github.muntashirakon.AppManager.R.string.pref_exports_tree_unset_warning);
+            }
+        }
+        // Legacy fallback
+        io.github.muntashirakon.io.Path base = io.github.muntashirakon.AppManager.settings.Prefs.Storage.getAppManagerDirectory();
+        io.github.muntashirakon.io.Path file = base.createNewFile(fileName, null);
+        try (OutputStream outputStream = file.openOutputStream()) {
+            if (mPackagesToExport == null) mPackagesToExport = ComponentUtils.getAllPackagesWithRules(mContext);
+            for (String packageName: mPackagesToExport) {
+                for (int userHandle : mUserIds) {
+                    try (ComponentsBlocker cb = ComponentsBlocker.getInstance(packageName, userHandle)) {
+                        ComponentUtils.storeRules(outputStream, cb.getAll(mTypesToExport), true);
+                    }
+                }
+            }
+        }
+    }
 }

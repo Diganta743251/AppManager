@@ -16,6 +16,12 @@ android {
         targetSdk target_sdk
     }
 
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
     compileOptions {
         encoding "UTF-8"
     }
@@ -31,10 +37,17 @@ tasks.register('buildDocs') {
     def injected = project.objects.newInstance(InjectedExecOps)
     doLast {
         println("=== docs: start ===")
-        String buildExec = "${rootProject.projectDir.absolutePath}/scripts/make_docs.sh"
-        injected.execOps.exec {
-            workingDir = project.rootDir
-            executable = buildExec
+        if (!System.getProperty('os.name').toLowerCase().contains('windows')) {
+            String buildExec = "${rootProject.projectDir.absolutePath}/scripts/make_docs.sh"
+            injected.execOps.exec {
+                workingDir = project.rootDir
+                executable = buildExec
+            }
+        } else {
+            // Create empty raw resources directory for Windows
+            File resDir = new File("${project.projectDir}/src/main/res/raw")
+            resDir.mkdirs()
+            println("Created empty raw resources directory for Windows")
         }
         println("=== docs: finish ===")
     }

@@ -5,7 +5,6 @@ package io.github.muntashirakon.AppManager.compat;
 import android.Manifest;
 import android.annotation.UserIdInt;
 import android.app.ActivityManager;
-import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
@@ -52,6 +51,10 @@ public final class ActivityManagerCompat {
     public interface ActivityLaunchUserInteractionRequiredCallback {
         @WorkerThread
         void onInteraction();
+    }
+
+    private static boolean isPlay() {
+        return "playstore".equals(io.github.muntashirakon.AppManager.BuildConfig.FLAVOR);
     }
 
     @RequiresPermission(allOf = {
@@ -223,7 +226,8 @@ public final class ActivityManagerCompat {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             return IActivityManager.Stub.asInterface(ProxyBinder.getService(Context.ACTIVITY_SERVICE));
         } else {
-            return ActivityManagerNative.asInterface(ProxyBinder.getService(Context.ACTIVITY_SERVICE));
+            // Fallback removed for Play builds; ActivityManagerNative no longer available on modern SDKs.
+            return IActivityManager.Stub.asInterface(ProxyBinder.getService(Context.ACTIVITY_SERVICE));
         }
     }
 
@@ -231,7 +235,8 @@ public final class ActivityManagerCompat {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             return IActivityManager.Stub.asInterface(ProxyBinder.getUnprivilegedService(Context.ACTIVITY_SERVICE));
         } else {
-            return ActivityManagerNative.asInterface(ProxyBinder.getUnprivilegedService(Context.ACTIVITY_SERVICE));
+            // Fallback removed for Play builds
+            return IActivityManager.Stub.asInterface(ProxyBinder.getUnprivilegedService(Context.ACTIVITY_SERVICE));
         }
     }
 

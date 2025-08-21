@@ -113,6 +113,14 @@ public class ImportExportRulesPreferences extends PreferenceFragment {
                     mExportRules.launch(fileName);
                     return true;
                 });
+        ((Preference) Objects.requireNonNull(findPreference("quick_export")))
+                .setOnPreferenceClickListener(preference -> {
+                    // Launch rules type selection dialog without URI → triggers auto-routed Quick Export
+                    RulesTypeSelectionDialogFragment dialogFragment = RulesTypeSelectionDialogFragment
+                            .newQuickExportInstance(null, Users.getUsersIds());
+                    dialogFragment.show(getParentFragmentManager(), RulesTypeSelectionDialogFragment.TAG);
+                    return true;
+                });
         ((Preference) Objects.requireNonNull(findPreference("import")))
                 .setOnPreferenceClickListener(preference -> {
                     mImportRules.launch(MIME_TSV);

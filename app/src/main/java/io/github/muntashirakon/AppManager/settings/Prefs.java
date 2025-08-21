@@ -166,6 +166,12 @@ public final class Prefs {
     }
 
     public static final class BackupRestore {
+        public static boolean usePathContract() {
+            return AppPref.getBoolean(AppPref.PrefKey.PREF_USE_PATH_CONTRACT_BOOL);
+        }
+        public static void setUsePathContract(boolean enabled) {
+            AppPref.set(AppPref.PrefKey.PREF_USE_PATH_CONTRACT_BOOL, enabled);
+        }
         public static boolean backupAppsWithKeyStore() {
             return AppPref.getBoolean(AppPref.PrefKey.PREF_BACKUP_ANDROID_KEYSTORE_BOOL);
         }

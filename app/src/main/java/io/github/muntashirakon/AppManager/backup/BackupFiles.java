@@ -32,6 +32,14 @@ public class BackupFiles {
 
     @NonNull
     public static Path getBaseDirectory() {
+        if (Prefs.BackupRestore.usePathContract()) {
+            // SAF-first: route to app-scoped backups dir via PathContract
+            java.io.File dir = io.github.muntashirakon.AppManager.di.ServiceLocator
+                    .getPathContract(io.github.muntashirakon.AppManager.utils.ContextUtils.getContext())
+                    .appBackupsDir(io.github.muntashirakon.AppManager.utils.ContextUtils.getContext());
+            return io.github.muntashirakon.io.Paths.get(dir);
+        }
+        // Legacy behavior
         return Prefs.Storage.getAppManagerDirectory();
     }
 

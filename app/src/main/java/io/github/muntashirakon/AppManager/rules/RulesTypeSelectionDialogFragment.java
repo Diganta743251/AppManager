@@ -18,9 +18,12 @@ import androidx.fragment.app.FragmentActivity;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.logs.Log;
@@ -36,6 +39,34 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
     public static final String ARG_URI = "ARG_URI";  // Uri
     public static final String ARG_PKG = "ARG_PKG";  // Package Names or null (for all)
     public static final String ARG_USERS = "ARG_USERS";  // Integer array of user handles
+
+    // Factory: ACTION_CREATE_DOCUMENT flow (explicit URI)
+    @NonNull
+    public static RulesTypeSelectionDialogFragment newExportInstance(@NonNull Uri uri,
+                                                                     @Nullable ArrayList<String> packages,
+                                                                     @UserIdInt @Nullable int[] userIds) {
+        RulesTypeSelectionDialogFragment f = new RulesTypeSelectionDialogFragment();
+        Bundle b = new Bundle();
+        b.putInt(ARG_MODE, MODE_EXPORT);
+        b.putParcelable(ARG_URI, uri);
+        if (packages != null) b.putStringArrayList(ARG_PKG, packages);
+        if (userIds != null) b.putIntArray(ARG_USERS, userIds);
+        f.setArguments(b);
+        return f;
+    }
+
+    // Factory: Quick Export (auto-routed, no URI)
+    @NonNull
+    public static RulesTypeSelectionDialogFragment newQuickExportInstance(@Nullable ArrayList<String> packages,
+                                                                          @UserIdInt @Nullable int[] userIds) {
+        RulesTypeSelectionDialogFragment f = new RulesTypeSelectionDialogFragment();
+        Bundle b = new Bundle();
+        b.putInt(ARG_MODE, MODE_EXPORT);
+        if (packages != null) b.putStringArrayList(ARG_PKG, packages);
+        if (userIds != null) b.putIntArray(ARG_USERS, userIds);
+        f.setArguments(b);
+        return f;
+    }
 
     @IntDef(value = {
             MODE_IMPORT,
@@ -74,7 +105,6 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
         mUri = BundleCompat.getParcelable(args, ARG_URI, Uri.class);
         mUserIds = args.getIntArray(ARG_USERS);
         if (mUserIds == null) mUserIds = new int[]{UserHandleHidden.myUserId()};
-        if (mUri == null) return super.onCreateDialog(savedInstanceState);
         List<Integer> ruleIndexes = new ArrayList<>();
         for (int i = 0; i < RULE_TYPES.length; ++i) {
             ruleIndexes.add(i);
@@ -101,16 +131,19 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
     }
 
     private void handleExport() {
-        if (mUri == null) {
-            return;
-        }
         WeakReference<FragmentActivity> activityRef = new WeakReference<>(mActivity);
         ThreadUtils.postOnBackgroundThread(() -> {
             PowerManager.WakeLock wakeLock = CpuUtils.getPartialWakeLock("rules_exporter");
             wakeLock.acquire();
             try {
                 RulesExporter exporter = new RulesExporter(new ArrayList<>(mSelectedTypes), mPackages, mUserIds);
-                exporter.saveRules(mUri);
+                if (mUri != null) {
+                    // Legacy ACTION_CREATE_DOCUMENT flow
+                    exporter.saveRules(mUri);
+                } else {
+                    // Quick Export: auto-routed via PathContract or legacy fallback
+                    exporter.saveRulesAutoRouted(generateRulesExportFileName());
+                }
                 ThreadUtils.postOnMainThread(() -> UIUtils.displayShortToast(R.string.the_export_was_successful));
             } catch (IOException e) {
                 ThreadUtils.postOnMainThread(() -> UIUtils.displayLongToast(R.string.export_failed));
@@ -141,6 +174,12 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
             }
             hideProgressBar(activityRef);
         });
+    }
+
+    private String generateRulesExportFileName() {
+        // Example: rules-20250101-120045.tsv
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss", Locale.ROOT);
+        return "rules-" + sdf.format(new Date()) + ".tsv";
     }
 
     private void hideProgressBar(@NonNull WeakReference<FragmentActivity> activityRef) {

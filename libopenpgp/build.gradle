@@ -12,6 +12,12 @@ android {
         targetSdk target_sdk
     }
 
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
     compileOptions {
         encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
