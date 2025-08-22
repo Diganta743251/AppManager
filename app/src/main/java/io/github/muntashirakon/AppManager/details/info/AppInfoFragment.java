@@ -20,8 +20,6 @@ import static io.github.muntashirakon.AppManager.utils.Utils.openAsFolderInFM;
 
 import android.Manifest;
 import android.app.ActivityManager;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -313,35 +311,29 @@ public class AppInfoFragment extends Fragment implements SwipeRefreshLayout.OnRe
             showFreezeDialog(freezeTypeN, freezeType != null);
         });
         mIconView.setOnClickListener(v -> {
-            ClipboardManager clipboard = (ClipboardManager) ContextUtils.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
             ThreadUtils.postOnBackgroundThread(() -> {
-                ClipData clipData = clipboard.getPrimaryClip();
-                if (clipData != null && clipData.getItemCount() > 0) {
-                    String data = clipData.getItemAt(0).coerceToText(ContextUtils.getContext()).toString().trim()
-                            .toLowerCase(Locale.ROOT);
-                    if (data.matches("[0-9a-f: \n]+")) {
-                        data = data.replaceAll("[: \n]+", "");
-                        SignerInfo signerInfo = PackageUtils.getSignerInfo(mPackageInfo, mIsExternalApk);
-                        if (signerInfo != null) {
-                            X509Certificate[] certs = signerInfo.getCurrentSignerCerts();
-                            if (certs != null && certs.length == 1) {
-                                try {
-                                    Pair<String, String>[] digests = DigestUtils.getDigests(certs[0].getEncoded());
-                                    for (Pair<String, String> digest : digests) {
-                                        if (digest.second.equals(data)) {
-                                            if (digest.first.equals(DigestUtils.MD5) || digest.first.equals(DigestUtils.SHA_1)) {
-                                                ThreadUtils.postOnMainThread(() -> displayLongToast(R.string.verified_using_unreliable_hash));
-                                            } else
-                                                ThreadUtils.postOnMainThread(() -> displayLongToast(R.string.verified));
-                                            return;
-                                        }
+                String data = Utils.readHashValueFromClipboard(ContextUtils.getContext());
+                if (data != null) {
+                    SignerInfo signerInfo = PackageUtils.getSignerInfo(mPackageInfo, mIsExternalApk);
+                    if (signerInfo != null) {
+                        X509Certificate[] certs = signerInfo.getCurrentSignerCerts();
+                        if (certs != null && certs.length == 1) {
+                            try {
+                                Pair<String, String>[] digests = DigestUtils.getDigests(certs[0].getEncoded());
+                                for (Pair<String, String> digest : digests) {
+                                    if (digest.second.equals(data)) {
+                                        if (digest.first.equals(DigestUtils.MD5) || digest.first.equals(DigestUtils.SHA_1)) {
+                                            ThreadUtils.postOnMainThread(() -> displayLongToast(R.string.verified_using_unreliable_hash));
+                                        } else
+                                            ThreadUtils.postOnMainThread(() -> displayLongToast(R.string.verified));
+                                        return;
                                     }
-                                } catch (CertificateEncodingException ignore) {
                                 }
+                            } catch (CertificateEncodingException ignore) {
                             }
                         }
-                        ThreadUtils.postOnMainThread(() -> displayLongToast(R.string.not_verified));
                     }
+                    ThreadUtils.postOnMainThread(() -> displayLongToast(R.string.not_verified));
                 }
             });
         });
@@ -406,14 +398,14 @@ public class AppInfoFragment extends Fragment implements SwipeRefreshLayout.OnRe
             runInTermuxMenu.setVisible(isDebuggable);
         }
         if (batteryOptMenu != null) {
-            batteryOptMenu.setVisible(SelfPermissions.checkSelfOrRemotePermission(ManifestCompat.permission.DEVICE_POWER));
+            batteryOptMenu.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
         }
         if (sensorsMenu != null) {
             sensorsMenu.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
                     && SelfPermissions.checkSelfOrRemotePermission(ManifestCompat.permission.MANAGE_SENSORS));
         }
         if (netPolicyMenu != null) {
-            netPolicyMenu.setVisible(SelfPermissions.checkSelfOrRemotePermission(ManifestCompat.permission.MANAGE_NETWORK_POLICY));
+            netPolicyMenu.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N);
         }
         if (installMenu != null) {
             installMenu.setVisible(Users.getUsersIds().length > 1 && SelfPermissions.canInstallExistingPackages());
@@ -525,8 +517,12 @@ public class AppInfoFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             }
                         })
                         .show();
-            } else {
-                Log.e(TAG, "No DUMP permission.");
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                try {
+                    startActivity(IntentUtils.getBatteryOptSettings(mPackageName));
+                } catch (Throwable th) {
+                    UIUtils.displayShortToast("No DEVICE_POWER permission.");
+                }
             }
         } else if (itemId == R.id.action_sensor) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && SelfPermissions.checkSelfOrRemotePermission(ManifestCompat.permission.MANAGE_SENSORS)) {
@@ -566,6 +562,16 @@ public class AppInfoFragment extends Fragment implements SwipeRefreshLayout.OnRe
         } else if (itemId == R.id.action_net_policy) {
             if (!UserHandleHidden.isApp(mApplicationInfo.uid)) {
                 UIUtils.displayLongToast(R.string.netpolicy_cannot_be_modified_for_core_apps);
+                return true;
+            }
+            if (!SelfPermissions.checkSelfOrRemotePermission(ManifestCompat.permission.MANAGE_NETWORK_POLICY)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    try {
+                        startActivity(IntentUtils.getNetPolicySettings(mPackageName));
+                    } catch (Throwable th) {
+                        UIUtils.displayShortToast("No MANAGE_NETWORK_POLICY permission.");
+                    }
+                }
                 return true;
             }
             ArrayMap<Integer, String> netPolicyMap = NetworkPolicyManagerCompat.getAllReadablePolicies(ContextUtils.getContext());
@@ -918,6 +924,11 @@ public class AppInfoFragment extends Fragment implements SwipeRefreshLayout.OnRe
                     .setColor(ColorCodes.getComponentRunningIndicatorColor(context))
                     .setOnClickListener(v ->
                             displayRunningServices(tagCloud.runningServices, v.getContext()));
+        } else if (tagCloud.isRunning) {
+            TagItem runningTag = new TagItem();
+            tagItems.add(runningTag);
+            runningTag.setTextRes(R.string.running)
+                    .setColor(ColorCodes.getComponentRunningIndicatorColor(context));
         }
         if (tagCloud.isForceStopped) {
             tagItems.add(new TagItem()
@@ -1019,6 +1030,9 @@ public class AppInfoFragment extends Fragment implements SwipeRefreshLayout.OnRe
                             }
                         })
                         .show());
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                batteryOptTag.setOnClickListener(v -> ExUtils.exceptionAsIgnored(() ->
+                        startActivity(IntentUtils.getBatteryOptSettings(mPackageName))));
             }
         }
         if (!tagCloud.sensorsEnabled) {

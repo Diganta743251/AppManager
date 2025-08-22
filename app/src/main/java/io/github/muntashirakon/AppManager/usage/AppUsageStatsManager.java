@@ -21,6 +21,7 @@ import android.os.Parcelable;
 import android.os.RemoteException;
 import android.os.UserHandleHidden;
 import android.telephony.SubscriptionInfo;
+import android.telephony.TelephonyManager;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -50,6 +51,7 @@ import io.github.muntashirakon.AppManager.logs.Log;
 import io.github.muntashirakon.AppManager.self.SelfPermissions;
 import io.github.muntashirakon.AppManager.utils.ContextUtils;
 import io.github.muntashirakon.AppManager.utils.ExUtils;
+import io.github.muntashirakon.AppManager.utils.Utils;
 import io.github.muntashirakon.proc.ProcFs;
 import io.github.muntashirakon.proc.ProcUidNetStat;
 
@@ -319,6 +321,10 @@ public class AppUsageStatsManager {
         for (UsageEvents.Event event : events) {
             int eventType = event.getEventType();
             String packageName = event.getPackageName();
+            if (packageName == null) {
+                Log.i(TAG, "Ignored event with empty package name: " + Utils.prettyPrintObject(event));
+                continue;
+            }
             // Queries are sorted in descending order, so a not-running activity should be paused or
             // stopped first and then resumed (i.e., reversed logic).
             if (eventType == UsageEvents.Event.DEVICE_SHUTDOWN) {
@@ -489,13 +495,19 @@ public class AppUsageStatsManager {
             // Unsupported API
             return Collections.singletonList(null);
         }
-        PackageManager pm = ContextUtils.getContext().getPackageManager();
+        Context ctx = ContextUtils.getContext();
+        PackageManager pm = ctx.getPackageManager();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
                 && !pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION)) {
             Log.i(TAG, "No such feature: %s", PackageManager.FEATURE_TELEPHONY_SUBSCRIPTION);
             return Collections.emptyList();
         } else if (!pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)) {
             Log.i(TAG, "No such feature: %s", PackageManager.FEATURE_TELEPHONY);
+            return Collections.emptyList();
+        }
+        TelephonyManager telephonyManager = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        if (telephonyManager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+            Log.i(TAG, "Device does not have a phone radio.");
             return Collections.emptyList();
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q && !SelfPermissions.checkSelfOrRemotePermission(Manifest.permission.READ_PHONE_STATE)) {

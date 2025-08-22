@@ -39,6 +39,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import org.jetbrains.annotations.Contract;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
@@ -601,6 +602,28 @@ public class Utils {
     }
 
     @Nullable
+    public static CharSequence readClipboard(@NonNull Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = clipboard.getPrimaryClip();
+        if (clipData != null && clipData.getItemCount() > 0) {
+            return clipData.getItemAt(0).coerceToText(context);
+        }
+        return null;
+    }
+
+    @Nullable
+    public static String readHashValueFromClipboard(@NonNull Context context) {
+        CharSequence clipData = readClipboard(context);
+        if (clipData != null) {
+            String data = clipData.toString().trim().toLowerCase(Locale.ROOT);
+            if (data.matches("[0-9a-f: \n]+")) {
+                return data.replaceAll("[: \n]+", "");
+            }
+        }
+        return null;
+    }
+
+    @Nullable
     public static View.OnClickListener openAsFolderInFM(@NonNull Context context, @Nullable String dir) {
         if (dir == null) return null;
         return view -> {
@@ -659,6 +682,34 @@ public class Utils {
             return false;
         }
     }
+
+    @NonNull
+    public static <T> String prettyPrintObject(@Nullable T obj) {
+        if (obj == null) {
+            return "null";
+        }
+        StringBuilder sb = new StringBuilder();
+        Class<?> clazz = obj.getClass();
+        sb.append(clazz.getSimpleName()).append("{");
+        Field[] fields = clazz.getDeclaredFields();
+        for (int i = 0; i < fields.length; i++) {
+            Field field = fields[i];
+            field.setAccessible(true);
+            sb.append(field.getName()).append("=");
+            try {
+                Object value = field.get(obj);
+                sb.append(value);
+            } catch (IllegalAccessException e) {
+                sb.append("N/A");
+            }
+            if (i < fields.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
 
     public static boolean isRoboUnitTest() {
         return "robolectric".equals(Build.FINGERPRINT);
