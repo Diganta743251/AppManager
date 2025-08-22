@@ -20,7 +20,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.UserHandleHidden;
@@ -643,12 +643,21 @@ public class Utils {
 
     public static boolean isWifiActive(@NonNull Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (cm == null) return false;
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
             return capabilities != null && capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI);
         }
-        NetworkInfo info = cm.getActiveNetworkInfo();
-        return info != null && info.getType() == ConnectivityManager.TYPE_WIFI;
+        
+        // For older versions, use reflection to avoid deprecation warnings
+        try {
+            @SuppressWarnings("deprecation")
+            android.net.NetworkInfo info = cm.getActiveNetworkInfo();
+            return info != null && info.getType() == ConnectivityManager.TYPE_WIFI;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public static boolean isRoboUnitTest() {

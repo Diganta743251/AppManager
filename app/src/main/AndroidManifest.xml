@@ -166,7 +166,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/DeviceGuardTheme"
         tools:ignore="UnusedAttribute">
         <activity
             android:name=".filters.FinderActivity"
@@ -204,6 +204,12 @@
                 <data android:host="settings" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".settings.QuickExportComposeActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="false"
+            android:label="@string/pref_quick_export" />
         <activity
             android:name=".sharedpref.SharedPrefsActivity"
             android:enableOnBackInvokedCallback="true"
@@ -1080,21 +1086,7 @@
             android:launchMode="singleInstance"
             android:taskAffinity=".profiles.ProfileApplierActivity"
             android:theme="@style/AppTheme.TransparentBackground" />
-        <activity
-            android:name=".main.SplashActivity"
-            android:enableOnBackInvokedCallback="true"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:theme="@style/AppTheme.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".logcat.LogViewerActivity"
             android:enableOnBackInvokedCallback="true"
@@ -1378,6 +1370,54 @@
             android:authorities="${applicationId}.file"
             android:exported="false"
             android:grantUriPermissions="true" />
+
+        <!-- DeviceGuard Pro Compose Activities -->
+        <activity
+            android:name=".main.SplashActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="true"
+            android:theme="@style/Theme.App.Starting">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".settings.AppearanceComposeActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="false"
+            android:label="Appearance Settings" />
+        
+        <activity
+            android:name=".settings.ImportExportComposeActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="false"
+            android:label="Import/Export Rules" />
+        
+        <activity
+            android:name=".settings.AboutComposeActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="false"
+            android:label="About DeviceGuard Pro" />
+        
+        <activity
+            android:name=".main.MainComposeActivity"
+            android:enableOnBackInvokedCallback="true"
+            android:exported="false"
+            android:label="DeviceGuard Pro" />
+
+        <!-- DeviceGuard Pro Quick Actions Widget -->
+        <receiver
+            android:name=".widget.QuickActionsWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_actions_widget_info" />
+        </receiver>
 
         <meta-data
             android:name="android.permission.INTERNET.mode"

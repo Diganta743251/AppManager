@@ -4,6 +4,7 @@ package io.github.muntashirakon.AppManager.rules;
 
 import android.annotation.UserIdInt;
 import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -27,6 +28,7 @@ import java.util.Locale;
 
 import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.logs.Log;
+import io.github.muntashirakon.AppManager.settings.Prefs;
 import io.github.muntashirakon.AppManager.settings.SettingsActivity;
 import io.github.muntashirakon.AppManager.utils.CpuUtils;
 import io.github.muntashirakon.AppManager.utils.ThreadUtils;
@@ -215,7 +217,7 @@ public class RulesTypeSelectionDialogFragment extends DialogFragment {
                             // Fallback: open legacy dir
                             io.github.muntashirakon.io.Path base = io.github.muntashirakon.AppManager.settings.Prefs.Storage.getAppManagerDirectory();
                             Intent intent = new Intent(Intent.ACTION_VIEW);
-                            intent.setData(base.getFileUri());
+                            intent.setData(base.getUri());
                             startActivity(Intent.createChooser(intent, getString(R.string.open)));
                         } catch (Throwable ignore) {
                         }

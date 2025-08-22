@@ -1,5 +1,13 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/ic_launcher_background"/>
-    <item android:drawable="@drawable/ic_launcher_foreground"/>
+    <item>
+        <shape android:shape="oval">
+            <gradient
+                android:angle="135"
+                android:startColor="@color/brand_primary"
+                android:endColor="@color/brand_secondary"
+                android:type="linear" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_deviceguard_logo"/>
 </layer-list>

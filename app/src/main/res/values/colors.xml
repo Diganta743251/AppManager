@@ -1,5 +1,27 @@
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <resources>
+    <!-- DeviceGuard Pro Brand Colors -->
+    <color name="brand_primary">#1E88E5</color>
+    <color name="brand_primary_variant">#1565C0</color>
+    <color name="brand_secondary">#26A69A</color>
+    <color name="brand_secondary_variant">#00695C</color>
+    <color name="brand_accent">#FF7043</color>
+    <color name="brand_surface">#F8F9FA</color>
+    <color name="brand_background">#FFFFFF</color>
+    <color name="brand_error">#E53935</color>
+    <color name="brand_success">#43A047</color>
+    <color name="brand_warning">#FB8C00</color>
+    
+    <!-- Dark Theme Colors -->
+    <color name="brand_primary_dark">#42A5F5</color>
+    <color name="brand_surface_dark">#121212</color>
+    <color name="brand_background_dark">#1E1E1E</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#1E88E5</color>
+    <color name="gradient_end">#26A69A</color>
+    
+    <!-- Original colors -->
     <color name="fm_icon_background">@color/m3_sys_color_light_on_surface_variant</color>
     <color name="fm_symbolic_link">#f37785</color>
 </resources>

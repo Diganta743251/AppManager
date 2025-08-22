@@ -1,0 +1,22 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+
+    <!-- DeviceGuard Pro Dark Theme -->
+    <style name="DeviceGuardTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_variant</item>
+        <item name="colorSecondary">@color/brand_secondary</item>
+        <item name="colorSecondaryVariant">@color/brand_secondary_variant</item>
+        <item name="colorAccent">@color/brand_accent</item>
+        <item name="colorSurface">@color/brand_surface</item>
+        <item name="colorBackground">@color/brand_background</item>
+        <item name="colorError">@color/brand_error</item>
+        
+        <!-- Status and Navigation Bar -->
+        <item name="android:statusBarColor">@color/brand_background</item>
+        <item name="android:navigationBarColor">@color/brand_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+
+</resources>

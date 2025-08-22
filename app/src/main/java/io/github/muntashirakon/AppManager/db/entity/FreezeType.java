@@ -5,6 +5,7 @@ package io.github.muntashirakon.AppManager.db.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import io.github.muntashirakon.AppManager.utils.FreezeUtils;
@@ -22,6 +23,7 @@ public class FreezeType {
 
     public FreezeType() {}
 
+    @Ignore
     public FreezeType(@NonNull String packageName, @FreezeUtils.FreezeMethod int type) {
         this.packageName = packageName;
         this.type = type;

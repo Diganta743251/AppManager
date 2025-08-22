@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?><!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">DeviceGuard Pro</string>
     <string name="_lang_tag" translatable="false">en</string>
     <string name="uninstall">Uninstall</string>
     <string name="permissions">Uses permissions</string>
@@ -89,7 +90,7 @@
     <string name="license">License</string>
     <string name="license_message" translatable="false"><a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU General
         Public License v3.0</a></string>
-    <string name="copyright_message" translatable="false">© 2020–2025 <a href="https://github.com/MuntashirAkon">Muntashir Al-Islam</a></string>
+    <string name="copyright_message" translatable="false">© 2025 DeviceGuard Pro - Based on <a href="https://github.com/MuntashirAkon/AppManager">App Manager</a> by <a href="https://github.com/MuntashirAkon">Muntashir Al-Islam</a></string>
     <string name="third_party">Third-party libraries and icons</string>
     <string name="third_party_message" translatable="false">-
         <a href="https://github.com/zhanghai/AndroidFastScroll">AndroidFastScroll</a> (Apache 2.0)
@@ -326,10 +327,10 @@
     <string name="keyboard_type">Keyboard type</string>
     <string name="navigation">Navigation</string>
     <string name="touchscreen">Touchscreen</string>
-    <string name="pref_export_msg">Export blocking rules configured within App Manager to external storage.</string>
+    <string name="pref_export_msg">Export blocking rules configured within DeviceGuard Pro to external storage.</string>
     <string name="pref_quick_export">Quick export</string>
     <string name="pref_quick_export_msg">Export rules immediately using the configured export directory (auto-routed).</string>
-    <string name="pref_import_msg">Import previously exported blocking rules from App Manager.</string>
+    <string name="pref_import_msg">Import previously exported blocking rules from DeviceGuard Pro.</string>
     <string name="pref_import_watt_msg">Import blocking rules from Watt, each file containing rules for a single named package as <tt>packagename.xml</tt> etc.</string>
     <string name="pref_import_blocker_msg">Import blocking rules from Blocker, each file containing rules for a single package.</string>
     <string name="permission_denied">Permission denied</string>
@@ -341,7 +342,7 @@
     <string name="night">Night</string>
     <string name="select_theme">Theme</string>
     <string name="apply">Apply</string>
-    <string name="pref_about_msg">App Manager version, license, credits, etc.</string>
+    <string name="pref_about_msg">DeviceGuard Pro version, license, credits, etc.</string>
     <string name="version">Version</string>
     <string name="sort_by_wifi_data">Wi-Fi data</string>
     <string name="block_trackers">Block trackers</string>
@@ -394,7 +395,7 @@
         <a href="https://x.com/AppManagerNews">Twitter/X</a> •
         <a href="https://floss.social/@appmanager">Mastodon</a></string>
     <string name="pref_import_existing">Import existing rules</string>
-    <string name="pref_import_existing_msg">Add components disabled by others apps to App Manager.
+    <string name="pref_import_existing_msg">Add components disabled by others apps to DeviceGuard Pro.
         Be careful when using this tool as there can be many false positives. Choose only the apps you\'re certain about.</string>
     <string name="clear_cache">Clear cache</string>
     <string name="block_unblock_trackers_description">Block or unblock ad and tracking components in all the installed apps</string>
@@ -639,7 +640,7 @@
     <string name="pref_compression_method">Compression method</string>
     <string name="pref_backup_flags_msg">Adding a preset for backup options removes the burden of selecting flags every time you back up/restore.</string>
     <string name="confirm_installation">Confirm installation</string>
-    <string name="allow_open_pgp_operation">Tap to allow App Manager to use OpenPGP</string>
+    <string name="allow_open_pgp_operation">Tap to allow DeviceGuard Pro to use OpenPGP</string>
     <string name="uninstall_updates">Uninstall updates</string>
     <string name="update_uninstalled_successfully">Updates for <xliff:g id="app_name" example="App Manager">%1$s</xliff:g> has been uninstalled.</string>
     <string name="failed_to_uninstall_updates">Could not uninstall updates for <xliff:g id="app_name" example="App Manager">%1$s</xliff:g>.</string>
@@ -677,10 +678,10 @@
     <string name="no_libs">No libraries</string>
     <string name="lib_details">Library details</string>
     <string name="tap_to_see_details">Tap to see details</string>
-    <string name="view_missing_signatures">Tap to view or send in signatures not yet present in App Manager\'s database of libraries.</string>
+    <string name="view_missing_signatures">Tap to view or send in signatures not yet present in DeviceGuard Pro\'s database of libraries.</string>
     <string name="copy">Copy</string>
     <string name="filter_running_apps">Running apps</string>
-    <string name="am_crashed">App Manager has just crashed</string>
+    <string name="am_crashed">DeviceGuard Pro has just crashed</string>
     <string name="tap_to_submit_crash_report">Tap to submit the crash report.</string>
     <string name="send_crash_report">Send crash report</string>
     <string name="select_apk">Select APK</string>
@@ -744,7 +745,7 @@
     <string name="source_stamp_verified_and_identified_to_be_from_source">SourceStamp verified and identified to be from <xliff:g id="source" example="Google Play">%1$s</xliff:g>.</string>
     <string name="splits">Splits</string>
     <string name="input_keystore_pass">Input KeyStore password</string>
-    <string name="input_keystore_pass_description">Enter the App Manager KeyStore password. If you\'re seeing this for the first time, please use a password generator to generate a password and save it in a secure place before inserting it here.</string>
+    <string name="input_keystore_pass_description">Enter the DeviceGuard Pro KeyStore password. If you\'re seeing this for the first time, please use a password generator to generate a password and save it in a secure place before inserting it here.</string>
     <string name="input_keystore_pass_msg">Tap here to enter KeyStore password</string>
     <string name="input_keystore_alias_pass">Password for alias <b>%1$s</b></string>
     <string name="input_keystore_alias_pass_description">Insert password for the alias <b>%1$s</b>. You can leave this empty if the password is the same as the KeyStore password.</string>
@@ -799,7 +800,7 @@
     <string name="backup_cache_description">Back up <b>cache</b>, <b>no_cache</b> and <b>no_backup</b> folders.</string>
     <string name="backup_extras">Extras</string>
     <string name="backup_extras_description">Back up app permissions, battery saving and data usage options, MagiskHide status, SSAID, etc. <font fgcolor="#ff0000">Depending on the permissions, not all extras can be restored.</font></string>
-    <string name="backup_rules_description">Back up rules configured within App Manager. <font fgcolor="#ff0000">Depending on the permissions, not all rules can be reapplied during restore.</font></string>
+    <string name="backup_rules_description">Back up rules configured within DeviceGuard Pro. <font fgcolor="#ff0000">Depending on the permissions, not all rules can be reapplied during restore.</font></string>
     <string name="backup_multiple_description">Create a separate <i>named</i> backup instead of the base backup.</string>
     <string name="backup_skip_signature_checks_description">Restore backups that either fail checksum verification or have different APK signatures than their prior backups.</string>
     <string name="patch_level">Patch level</string>
@@ -853,9 +854,9 @@
     <string name="internal_storage">Internal storage</string>
     <string name="external_storage">External storage</string>
     <string name="sd_card">SD card</string>
-    <string name="unlock_app_manager">Unlock App Manager</string>
+    <string name="unlock_app_manager">Unlock DeviceGuard Pro</string>
     <string name="screen_lock">Screen lock</string>
-    <string name="screen_lock_msg">Lock App Manager using Android screen lock</string>
+    <string name="screen_lock_msg">Lock DeviceGuard Pro using Android screen lock</string>
     <string name="type_null">No value</string>
     <string name="type_component_name">Component name</string>
     <string name="type_int_array">Array of integers</string>
@@ -886,7 +887,7 @@
     <string name="restart_to_reflect_changes">You must restart the device immediately to use the new changes.</string>
     <string name="installed_apps">Installed apps</string>
     <string name="enable_disable_features">Enable/disable features</string>
-    <string name="pref_enable_disable_features_msg">Enable or disable features in App Manager.</string>
+    <string name="pref_enable_disable_features_msg">Enable or disable features in DeviceGuard Pro.</string>
     <string name="last_actions">Last actions</string>
     <string name="isolated">Isolated</string>
     <string name="screen_lock_not_enabled">Please pick a screen lock in the Android settings, or clear app data.</string>
@@ -1533,4 +1534,16 @@
     <string name="preview">Preview</string>
     <string name="debloat_removal_unsafe">Unsafe</string>
     <string name="sort_by_cpu_time">CPU time</string>
+    
+    <!-- DeviceGuard Pro Widget -->
+    <string name="widget_description">Quick access to DeviceGuard Pro app management features</string>
+    
+    <!-- DeviceGuard Pro Enhanced Descriptions -->
+    <string name="app_description">Advanced Android App Management &amp; Security</string>
+    <string name="app_tagline">Professional-grade app analysis and management</string>
+    <string name="main_screen_title">DeviceGuard Pro</string>
+    <string name="security_analysis">Security Analysis</string>
+    <string name="app_management">App Management</string>
+    <string name="system_tools">System Tools</string>
+    <string name="privacy_protection">Privacy Protection</string>
 </resources>

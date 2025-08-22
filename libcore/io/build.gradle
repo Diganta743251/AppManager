@@ -2,7 +2,6 @@
 
 plugins {
     id('com.android.library')
-    id('org.jetbrains.kotlin.android') version "${kotlin_version}"
 }
 
 android {
@@ -32,6 +31,8 @@ dependencies {
     implementation project(path: ':libcore:compat')
 
     api "androidx.documentfile:documentfile:${documentfile_version}"
+    api "androidx.core:core:${androidx_core_version}"
+    implementation "androidx.appcompat:appcompat:${appcompat_version}"
 
     implementation "androidx.annotation:annotation:${annotation_version}"
 }

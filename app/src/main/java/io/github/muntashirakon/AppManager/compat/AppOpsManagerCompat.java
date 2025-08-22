@@ -55,23 +55,44 @@ public class AppOpsManagerCompat {
     public static final int OP_FLAGS_ALL_TRUSTED;
 
     static {
+        // Initialize operation flags with fallback values
+        int opFlagSelf = 0;
+        int opFlagTrustedProxy = 0;
+        int opFlagUntrustedProxy = 0;
+        int opFlagTrustedProxied = 0;
+        int opFlagUntrustedProxied = 0;
+        int opFlagsAll = 0;
+        int opFlagsAllTrusted = 0;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            OP_FLAG_SELF = AppOpsManagerHidden.OP_FLAG_SELF;
-            OP_FLAG_TRUSTED_PROXY = AppOpsManagerHidden.OP_FLAG_TRUSTED_PROXY;
-            OP_FLAG_UNTRUSTED_PROXY = AppOpsManagerHidden.OP_FLAG_UNTRUSTED_PROXY;
-            OP_FLAG_TRUSTED_PROXIED = AppOpsManagerHidden.OP_FLAG_TRUSTED_PROXIED;
-            OP_FLAG_UNTRUSTED_PROXIED = AppOpsManagerHidden.OP_FLAG_UNTRUSTED_PROXIED;
-            OP_FLAGS_ALL = AppOpsManagerHidden.OP_FLAGS_ALL;
-            OP_FLAGS_ALL_TRUSTED = AppOpsManagerHidden.OP_FLAGS_ALL_TRUSTED;
-        } else {
-            OP_FLAG_SELF = 0;
-            OP_FLAG_TRUSTED_PROXY = 0;
-            OP_FLAG_UNTRUSTED_PROXY = 0;
-            OP_FLAG_TRUSTED_PROXIED = 0;
-            OP_FLAG_UNTRUSTED_PROXIED = 0;
-            OP_FLAGS_ALL = 0;
-            OP_FLAGS_ALL_TRUSTED = 0;
+            try {
+                opFlagSelf = AppOpsManagerHidden.OP_FLAG_SELF;
+                opFlagTrustedProxy = AppOpsManagerHidden.OP_FLAG_TRUSTED_PROXY;
+                opFlagUntrustedProxy = AppOpsManagerHidden.OP_FLAG_UNTRUSTED_PROXY;
+                opFlagTrustedProxied = AppOpsManagerHidden.OP_FLAG_TRUSTED_PROXIED;
+                opFlagUntrustedProxied = AppOpsManagerHidden.OP_FLAG_UNTRUSTED_PROXIED;
+                opFlagsAll = AppOpsManagerHidden.OP_FLAGS_ALL;
+                opFlagsAllTrusted = AppOpsManagerHidden.OP_FLAGS_ALL_TRUSTED;
+            } catch (NoSuchFieldError | NoClassDefFoundError e) {
+                // Fallback to default values if hidden APIs are not available
+                opFlagSelf = 0x1;
+                opFlagTrustedProxy = 0x2;
+                opFlagUntrustedProxy = 0x4;
+                opFlagTrustedProxied = 0x8;
+                opFlagUntrustedProxied = 0x10;
+                opFlagsAll = 0x1F;
+                opFlagsAllTrusted = 0xB;
+            }
         }
+
+        // Assign final values
+        OP_FLAG_SELF = opFlagSelf;
+        OP_FLAG_TRUSTED_PROXY = opFlagTrustedProxy;
+        OP_FLAG_UNTRUSTED_PROXY = opFlagUntrustedProxy;
+        OP_FLAG_TRUSTED_PROXIED = opFlagTrustedProxied;
+        OP_FLAG_UNTRUSTED_PROXIED = opFlagUntrustedProxied;
+        OP_FLAGS_ALL = opFlagsAll;
+        OP_FLAGS_ALL_TRUSTED = opFlagsAllTrusted;
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -90,34 +111,67 @@ public class AppOpsManagerCompat {
     public static final int MIN_PRIORITY_UID_STATE;
 
     static {
+        // Initialize UID states with fallback values
+        int uidStatePersistent = 0;
+        int uidStateTop = 0;
+        int uidStateForegroundService = 0;
+        int uidStateForeground = 0;
+        int uidStateBackground = 0;
+        int uidStateCached = 0;
+        int uidStateForegroundServiceLocation = 0;
+        int maxPriorityUidState = 0;
+        int minPriorityUidState = 0;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            UID_STATE_PERSISTENT = AppOpsManagerHidden.UID_STATE_PERSISTENT;
-            UID_STATE_TOP = AppOpsManagerHidden.UID_STATE_TOP;
-            UID_STATE_FOREGROUND_SERVICE = AppOpsManagerHidden.UID_STATE_FOREGROUND_SERVICE;
-            UID_STATE_FOREGROUND = AppOpsManagerHidden.UID_STATE_FOREGROUND;
-            UID_STATE_BACKGROUND = AppOpsManagerHidden.UID_STATE_BACKGROUND;
-            UID_STATE_CACHED = AppOpsManagerHidden.UID_STATE_CACHED;
-        } else {
-            UID_STATE_PERSISTENT = 0;
-            UID_STATE_TOP = 0;
-            UID_STATE_FOREGROUND_SERVICE = 0;
-            UID_STATE_FOREGROUND = 0;
-            UID_STATE_BACKGROUND = 0;
-            UID_STATE_CACHED = 0;
+            try {
+                uidStatePersistent = AppOpsManagerHidden.UID_STATE_PERSISTENT;
+                uidStateTop = AppOpsManagerHidden.UID_STATE_TOP;
+                uidStateForegroundService = AppOpsManagerHidden.UID_STATE_FOREGROUND_SERVICE;
+                uidStateForeground = AppOpsManagerHidden.UID_STATE_FOREGROUND;
+                uidStateBackground = AppOpsManagerHidden.UID_STATE_BACKGROUND;
+                uidStateCached = AppOpsManagerHidden.UID_STATE_CACHED;
+            } catch (NoSuchFieldError | NoClassDefFoundError e) {
+                // Fallback to default values if hidden APIs are not available
+                uidStatePersistent = 100;
+                uidStateTop = 200;
+                uidStateForegroundService = 300;
+                uidStateForeground = 400;
+                uidStateBackground = 600;
+                uidStateCached = 700;
+            }
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            UID_STATE_FOREGROUND_SERVICE_LOCATION = AppOpsManagerHidden.UID_STATE_FOREGROUND_SERVICE_LOCATION;
-            MAX_PRIORITY_UID_STATE = AppOpsManagerHidden.MAX_PRIORITY_UID_STATE;
-            MIN_PRIORITY_UID_STATE = AppOpsManagerHidden.MIN_PRIORITY_UID_STATE;
+            try {
+                uidStateForegroundServiceLocation = AppOpsManagerHidden.UID_STATE_FOREGROUND_SERVICE_LOCATION;
+                maxPriorityUidState = AppOpsManagerHidden.MAX_PRIORITY_UID_STATE;
+                minPriorityUidState = AppOpsManagerHidden.MIN_PRIORITY_UID_STATE;
+            } catch (NoSuchFieldError | NoClassDefFoundError e) {
+                // Fallback values if hidden APIs are not available
+                uidStateForegroundServiceLocation = 350;
+                maxPriorityUidState = uidStatePersistent;
+                minPriorityUidState = uidStateCached;
+            }
         } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-            UID_STATE_FOREGROUND_SERVICE_LOCATION = 0;
-            MAX_PRIORITY_UID_STATE = UID_STATE_PERSISTENT;
-            MIN_PRIORITY_UID_STATE = UID_STATE_CACHED;
+            uidStateForegroundServiceLocation = 0;
+            maxPriorityUidState = uidStatePersistent;
+            minPriorityUidState = uidStateCached;
         } else {
-            UID_STATE_FOREGROUND_SERVICE_LOCATION = 0;
-            MAX_PRIORITY_UID_STATE = 0;
-            MIN_PRIORITY_UID_STATE = 0;
+            uidStateForegroundServiceLocation = 0;
+            maxPriorityUidState = 0;
+            minPriorityUidState = 0;
         }
+
+        // Assign final values
+        UID_STATE_PERSISTENT = uidStatePersistent;
+        UID_STATE_TOP = uidStateTop;
+        UID_STATE_FOREGROUND_SERVICE = uidStateForegroundService;
+        UID_STATE_FOREGROUND = uidStateForeground;
+        UID_STATE_BACKGROUND = uidStateBackground;
+        UID_STATE_CACHED = uidStateCached;
+        UID_STATE_FOREGROUND_SERVICE_LOCATION = uidStateForegroundServiceLocation;
+        MAX_PRIORITY_UID_STATE = maxPriorityUidState;
+        MIN_PRIORITY_UID_STATE = minPriorityUidState;
     }
 
     @Retention(RetentionPolicy.SOURCE)
@@ -127,7 +181,18 @@ public class AppOpsManagerCompat {
     private static final SparseArrayCompat<String> sModes = new SparseArrayCompat<>();
     private static final String[] sOpToString;
 
-    public static final int OP_NONE = AppOpsManagerHidden.OP_NONE;
+    public static final int OP_NONE;
+    
+    static {
+        int opNone = -1; // Default fallback value
+        try {
+            opNone = AppOpsManagerHidden.OP_NONE;
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
+            // Use fallback value if hidden API is not available
+            opNone = -1;
+        }
+        OP_NONE = opNone;
+    }
     /**
      * Control whether an application is allowed to run in the background.
      */
@@ -138,21 +203,40 @@ public class AppOpsManagerCompat {
      */
     @RequiresApi(Build.VERSION_CODES.P)
     public static final int OP_RUN_ANY_IN_BACKGROUND;
-    public static final int _NUM_OP = AppOpsManagerHidden._NUM_OP;
+    public static final int _NUM_OP;
 
     static {
+        // Initialize operation constants with fallback values
+        int opRunInBackground = 0;
+        int opRunAnyInBackground = 0;
+        int numOp = 100; // Default fallback value
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            OP_RUN_IN_BACKGROUND = AppOpsManagerHidden.OP_RUN_IN_BACKGROUND;
-        } else {
-            //noinspection NewApi
-            OP_RUN_IN_BACKGROUND = 0;
+            try {
+                opRunInBackground = AppOpsManagerHidden.OP_RUN_IN_BACKGROUND;
+            } catch (NoSuchFieldError | NoClassDefFoundError e) {
+                opRunInBackground = 63; // Fallback value for OP_RUN_IN_BACKGROUND
+            }
         }
+        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            OP_RUN_ANY_IN_BACKGROUND = AppOpsManagerHidden.OP_RUN_ANY_IN_BACKGROUND;
-        } else {
-            //noinspection NewApi
-            OP_RUN_ANY_IN_BACKGROUND = 0;
+            try {
+                opRunAnyInBackground = AppOpsManagerHidden.OP_RUN_ANY_IN_BACKGROUND;
+            } catch (NoSuchFieldError | NoClassDefFoundError e) {
+                opRunAnyInBackground = 70; // Fallback value for OP_RUN_ANY_IN_BACKGROUND
+            }
         }
+
+        try {
+            numOp = AppOpsManagerHidden._NUM_OP;
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
+            numOp = 100; // Fallback value for _NUM_OP
+        }
+
+        // Assign final values
+        OP_RUN_IN_BACKGROUND = opRunInBackground;
+        OP_RUN_ANY_IN_BACKGROUND = opRunAnyInBackground;
+        _NUM_OP = numOp;
     }
 
     /**

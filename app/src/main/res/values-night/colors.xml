@@ -1,0 +1,18 @@
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <!-- DeviceGuard Pro Dark Theme Colors -->
+    <color name="brand_primary">#42A5F5</color>
+    <color name="brand_primary_variant">#1976D2</color>
+    <color name="brand_secondary">#4DB6AC</color>
+    <color name="brand_secondary_variant">#00796B</color>
+    <color name="brand_accent">#FF8A65</color>
+    <color name="brand_surface">#1E1E1E</color>
+    <color name="brand_background">#121212</color>
+    <color name="brand_error">#EF5350</color>
+    <color name="brand_success">#66BB6A</color>
+    <color name="brand_warning">#FFA726</color>
+    
+    <!-- Gradient Colors for Dark Theme -->
+    <color name="gradient_start">#42A5F5</color>
+    <color name="gradient_end">#4DB6AC</color>
+</resources>

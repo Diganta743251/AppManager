@@ -38,6 +38,22 @@
 -keep public class io.github.muntashirakon.AppManager.debug.R$raw {*;}
 # Don't minify OpenPGP API
 -keep public class org.openintents.openpgp.IOpenPgpService { *; }
+
+# DeviceGuard Pro - Compose specific rules
+-keep class androidx.compose.** { *; }
+-keep class kotlin.Metadata { *; }
+-keep class kotlin.coroutines.** { *; }
+-keepclassmembers class androidx.compose.** { *; }
+
+# Keep DeviceGuard Pro Compose Activities
+-keep class com.deviceguard.pro.appmanager.settings.*ComposeActivity { *; }
+-keep class com.deviceguard.pro.appmanager.main.MainComposeActivity { *; }
+-keep class com.deviceguard.pro.appmanager.widget.QuickActionsWidget { *; }
+
+# Keep Material 3 components
+-keep class androidx.compose.material3.** { *; }
+-keep class androidx.compose.foundation.** { *; }
+-keep class androidx.compose.ui.** { *; }
 -keep public class org.openintents.openpgp.IOpenPgpService2 { *; }
 # Don't minify Spake2 library
 -keep public class io.github.muntashirakon.crypto.spake2.** { *; }
@@ -46,3 +62,40 @@
 -keep class com.android.** { *; }
 -keep class libcore.util.** { *; }
 -keep class org.xmlpull.v1.** { *; }
+
+# Play Store specific optimizations
+-keepattributes *Annotation*
+-keepattributes RuntimeVisibleAnnotations
+-keepattributes RuntimeInvisibleAnnotations
+-keepattributes RuntimeVisibleParameterAnnotations
+-keepattributes RuntimeInvisibleParameterAnnotations
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+
+# Keep Room database classes
+-keep class * extends androidx.room.RoomDatabase
+-keep @androidx.room.Entity class *
+-keep @androidx.room.Dao class *
+
+# Keep Kotlin metadata
+-keepattributes *Annotation*
+-keep class kotlin.Metadata { *; }
+
+# Keep Compose classes
+-keep class androidx.compose.** { *; }
+-keep class kotlin.coroutines.** { *; }
+
+# Missing classes for R8 - suppress warnings
+-dontwarn com.google.j2objc.annotations.ReflectionSupport
+-dontwarn com.google.j2objc.annotations.RetainedWith
+-dontwarn com.google.j2objc.annotations.Weak
+-dontwarn java.beans.BeanInfo
+-dontwarn java.beans.FeatureDescriptor
+-dontwarn java.beans.IntrospectionException
+-dontwarn java.beans.Introspector
+-dontwarn java.beans.PropertyDescriptor
+
+# Additional Play Store optimizations
+-dontwarn org.bouncycastle.**
+-dontwarn org.conscrypt.**
+-dontwarn org.openjsse.**

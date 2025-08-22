@@ -1,122 +1,207 @@
-<!-- SPDX-License-Identifier: GPL-3.0-or-later OR CC-BY-SA-4.0 -->
+# DeviceGuard Pro 🛡️
 
-<p align="center">
-  <img src="docs/raw/images/icon.png" alt="App Manager Logo" height="150dp">
-</p>
+**Advanced Android App Management & Security Suite**
 
-<h1 align="center">App Manager</h1>
+[![Android](https://img.shields.io/badge/Platform-Android-green.svg)](https://android.com)
+[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+[![Version](https://img.shields.io/badge/Version-5.0.0-blue.svg)](https://github.com/yourusername/DeviceGuardPro)
+[![License](https://img.shields.io/badge/License-GPL--3.0-red.svg)](LICENSE)
 
-<p align=center>
-  <a href="https://muntashirakon.github.io/AppManager">Docs</a> ·
-  <a href="https://github.com/MuntashirAkon/AppManager/releases">Releases</a> ·
-  <a href="https://t.me/AppManagerChannel">Telegram Channel</a>
-</p>
+## 🚀 **What is DeviceGuard Pro?**
+
+DeviceGuard Pro is a professional-grade Android application management and security analysis tool. Built with modern Android architecture and Material 3 design, it provides comprehensive app management capabilities for power users, developers, and security professionals.
+
+### ✨ **Key Features**
+
+🛡️ **Advanced Security Analysis**
+- Deep app component inspection
+- Permission analysis and management
+- Tracker detection and blocking
+- Signature verification
+
+📱 **Complete App Management**
+- Install, uninstall, and update apps
+- Backup and restore functionality
+- Batch operations support
+- App usage statistics
+
+🔍 **System Inspection Tools**
+- Running processes monitoring
+- System configuration analysis
+- Log viewer and analysis
+- File manager integration
+
+⚡ **Performance Optimization**
+- App freezing/unfreezing
+- Cache management
+- Storage analysis
+- Battery usage optimization
+
+🎨 **Modern UI/UX**
+- Material 3 design system
+- Dark mode and AMOLED themes
+- Smooth animations and transitions
+- Intuitive navigation
+
+## 📱 **Screenshots**
+
+| Main Screen | App Details | Security Analysis |
+|-------------|-------------|-------------------|
+| ![Main](screenshots/main.png) | ![Details](screenshots/details.png) | ![Security](screenshots/security.png) |
+
+## 🛠️ **Technical Specifications**
+
+- **Minimum SDK**: Android 5.0 (API 21)
+- **Target SDK**: Android 15 (API 35)
+- **Architecture**: MVVM with Jetpack Compose
+- **Language**: Java + Kotlin
+- **Build System**: Gradle with Android Gradle Plugin 8.7.2
+- **UI Framework**: Material 3 + Jetpack Compose
+
+### 🏗️ **Architecture Components**
+
+- **Jetpack Compose**: Modern UI toolkit
+- **Room Database**: Local data persistence
+- **WorkManager**: Background task management
+- **Navigation Component**: App navigation
+- **ViewModel**: UI state management
+- **LiveData**: Reactive data observation
+
+## 🚀 **Getting Started**
+
+### **Prerequisites**
+
+- Android Studio Ladybug | 2024.2.1 or later
+- JDK 17 or later
+- Android SDK 35
+- Git
+
+### **Building the Project**
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/DeviceGuardPro.git
+   cd DeviceGuardPro
+   ```
+
+2. **Open in Android Studio**
+   - Launch Android Studio
+   - Select "Open an existing project"
+   - Navigate to the cloned directory
+
+3. **Build the project**
+   ```bash
+   # Debug build
+   ./gradlew assembleOssDebug
+   
+   # Release build
+   ./gradlew assembleOssRelease
+   
+   # Play Store build
+   ./gradlew assemblePlaystoreRelease
+   ```
+
+### **Installation**
+
+#### **From APK**
+1. Download the latest APK from [Releases](https://github.com/yourusername/DeviceGuardPro/releases)
+2. Enable "Unknown sources" in Android settings
+3. Install the APK
+
+#### **From Source**
+1. Build the project (see above)
+2. Install via ADB: `adb install app/build/outputs/apk/oss/debug/app-oss-debug.apk`
+
+## 🔧 **Configuration**
+
+### **Build Variants**
+
+- **OSS Debug**: Development build with debugging enabled
+- **OSS Release**: Open source release build
+- **Playstore Release**: Optimized build for Play Store distribution
+
+### **Signing Configuration**
+
+For release builds, configure signing in `keystore.properties`:
+```properties
+storeFile=path/to/keystore.jks
+storePassword=your_store_password
+keyAlias=your_key_alias
+keyPassword=your_key_password
+```
+
+## 🤝 **Contributing**
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### **Development Setup**
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Run tests: `./gradlew test`
+5. Commit changes: `git commit -m 'Add amazing feature'`
+6. Push to branch: `git push origin feature/amazing-feature`
+7. Open a Pull Request
+
+### **Code Style**
+
+- Follow [Android Kotlin Style Guide](https://developer.android.com/kotlin/style-guide)
+- Use meaningful commit messages
+- Add documentation for public APIs
+- Include tests for new features
+
+## 📋 **Roadmap**
+
+### **Version 5.1.0** (Planned)
+- [ ] Enhanced security scanning
+- [ ] Cloud backup integration
+- [ ] Advanced filtering options
+- [ ] Performance improvements
+
+### **Version 5.2.0** (Future)
+- [ ] Machine learning-based threat detection
+- [ ] Multi-device synchronization
+- [ ] Advanced automation features
+- [ ] Plugin system
+
+## 🐛 **Bug Reports & Feature Requests**
+
+Please use [GitHub Issues](https://github.com/yourusername/DeviceGuardPro/issues) to report bugs or request features.
+
+**Bug Report Template:**
+- Device model and Android version
+- DeviceGuard Pro version
+- Steps to reproduce
+- Expected vs actual behavior
+- Screenshots (if applicable)
+
+## 📄 **License**
+
+This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+### **Third-Party Libraries**
+
+DeviceGuard Pro uses several open-source libraries:
+- [AndroidX](https://developer.android.com/jetpack/androidx) - Apache 2.0
+- [Material Components](https://github.com/material-components/material-components-android) - Apache 2.0
+- [Jetpack Compose](https://developer.android.com/jetpack/compose) - Apache 2.0
+- [Room](https://developer.android.com/training/data-storage/room) - Apache 2.0
+
+## 🙏 **Acknowledgments**
+
+- Based on the excellent [App Manager](https://github.com/MuntashirAkon/AppManager) by Muntashir Al-Islam
+- Material Design team for the beautiful design system
+- Android development community for continuous inspiration
+
+## 📞 **Support**
+
+- **Documentation**: [Wiki](https://github.com/yourusername/DeviceGuardPro/wiki)
+- **Community**: [Discussions](https://github.com/yourusername/DeviceGuardPro/discussions)
+- **Email**: support@deviceguardpro.com
 
 ---
 
-## Features
+**Made with ❤️ for Android Power Users**
 
-### General features
-- Fully reproducible, copylefted libre software (GPLv3+)
-- Material 3 with dynamic colours
-- Display as much information as possible in the main page
-- List activities, broadcast receivers, services, providers, app ops, permissions, signatures, shared libraries, etc. of an application
-- Launch activities and services
-- Create shortcuts of activities
-- [Intercept activities](https://muntashirakon.github.io/AppManager/#sec:interceptor-page)
-- Scan for trackers and libraries in apps and list (all or only) tracking classes (and their code dump)
-- View/save the manifest of an app
-- Display app usage, data usage (mobile and Wi-Fi), and app storage info (requires “Usage Access” permission)
-- Install/uninstall APK files (including APKS, APKM and XAPK with OBB files)
-- Share APK files
-- Back up/restore APK files
-- Batch operations
-- Single-click operations
-- Logcat viewer, manager and exporter
-- [Profiles](https://muntashirakon.github.io/AppManager/#sec:profiles-page)
-- Debloater
-- Code editor
-- File manager
-- Simple terminal emulator
-- Open an app in Aurora Store or in your favourite F-Droid client
-- Sign APK files with custom signatures before installing
-- Backup encryption: OpenPGP via OpenKeychain, RSA, ECC (hybrid encryption with AES) and AES.
-- Track foreground UI components
-
-### Root/ADB-only features
-
-- Revoke runtime (AKA dangerous) and development permissions
-- Change the mode of an app op
-- Display/kill/force-stop running apps or processes
-- Clear app data or app cache
-- View/change net policy
-- Control battery optimization
-- Freeze/unfreeze apps
-
-### Root-only features
-
-- Block any activities, broadcast receivers, services, or providers of an app with native import/export as well as Watt and Blocker import support
-- View/edit/delete shared preferences of any app
-- Back up/restore apps with data, rules and extras (such as permissions, battery optimization, SSAID, etc.)
-- View system configurations including blacklisted or whitelisted apps, permissions, etc.
-- View/change SSAID.
-
-…and many more! This single app combines the features of 5 or 6 apps any tech-savvy person needs!
-
-### Upcoming features
-- Finder: Find app components, permissions etc. in all apps
-- Basic APK editing
-- Routine operations
-- Enable/disable app actions such as launch on boot
-- Crash monitor
-- Systemless disabling/uninstalling of the system apps
-- Import app list exported by App Manager
-- More advance terminal emulator
-- Database viewer and editor, etc.
-
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-alt="Get it on F-Droid"
-height="80" />](https://f-droid.org/packages/io.github.muntashirakon.AppManager)
-
-## Translations
-
-Help translate [the app strings](https://hosted.weblate.org/engage/app-manager/) and
-[the docs](https://hosted.weblate.org/projects/app-manager/docs/) at Hosted Weblate.
-
-
-[![Translation status](https://hosted.weblate.org/widgets/app-manager/-/multi-auto.svg)](https://hosted.weblate.org/engage/app-manager/)
-
-
-## Mirrors
-
-[Codeberg](https://codeberg.org/muntashir/AppManager) ·
-[GitLab](https://gitlab.com/muntashir/AppManager) ·
-[Riseup](https://0xacab.org/muntashir/AppManager) ·
-[sourcehut](https://git.sr.ht/~muntashir/AppManager)
-
-## Screenshots
-
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" height="500dp" /><img src="fastlane/metadata/android/en-US/images/phoneScreenshots/9.png" height="500dp" />
-
-## Build Instructions
-See [BUILDING.rst](BUILDING.rst)
-
-## Contributing
-
-See [CONTRIBUTING.rst](CONTRIBUTING.rst)
-
-## Donation and Funding
-
-As of September 2024, App Manager is not accepting any financial support until further notice. But
-you may still be able to send gifts (e.g., gift cards, subscriptions, food and drink, flowers, or
-even cash). Please contact the maintainer at muntashirakon [at] riseup [dot] net for further
-assistance.
-
-In addition, the maintainers and contributors of this project DO NOT consent to the creation, sale,
-or promotion of tokens, cryptocurrencies, NFTs, or any other financial instruments that claim to
-represent this project, its code, or its community. Any such attempts are unauthorized and not
-affiliated with this project in any way.
-
-## Credits and Libraries
-
-A list of credits and libraries are available in the **About** section of the app.
+© 2025 DeviceGuard Pro. All rights reserved.

@@ -3,20 +3,21 @@
 plugins {
     id('com.android.application')
     id('dev.rikka.tools.refine') version "${refine_version}"
-    id('org.jetbrains.kotlin.android') version "${kotlin_version}"
+    id('org.jetbrains.kotlin.android')
+    id('org.jetbrains.kotlin.plugin.compose') version "${kotlin_version}"
 }
 
 android {
-    namespace 'io.github.muntashirakon.AppManager'
+    namespace 'com.deviceguard.pro.appmanager'
     compileSdk compile_sdk
     buildToolsVersion = build_tools
 
     defaultConfig {
-        applicationId 'io.github.muntashirakon.AppManager'
+        applicationId 'com.deviceguard.pro.appmanager'
         minSdk min_sdk
         targetSdk target_sdk
-        versionCode 445
-        versionName "4.0.5"
+        versionCode 500
+        versionName "5.0.0"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += [
@@ -37,18 +38,23 @@ android {
             keyAlias 'key0'
         }
         release {
-            storeFile file("release.keystore")
-            storePassword "password"
-            keyPassword "password"
-            keyAlias "releasekey"
+            storeFile file("appmaster-release.keystore")
+            storePassword "AppMaster2024!@#"
+            keyPassword "AppMaster2024!@#"
+            keyAlias "appmaster-key"
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            zipAlignEnabled true
         }
         debug {
             applicationIdSuffix '.debug'
@@ -63,13 +69,14 @@ android {
         oss {
             dimension "dist"
             // Default public name for OSS variant
-            resValue "string", "app_name", "App Manager"
+            resValue "string", "app_name", "DeviceGuard Pro"
         }
         playstore {
             dimension "dist"
-            applicationId "com.diganta.appmasterpro"
+            applicationId "com.deviceguard.pro.appmanager"
             // Branding for Play Store builds
-            resValue "string", "app_name", "AppMaster Pro"
+            resValue "string", "app_name", "DeviceGuard Pro"
+            resValue "string", "app_description", "Advanced Android App Management & Security"
             // Exclude hidden API dependent sources from Play flavor via source overlay
         }
     }
@@ -136,9 +143,6 @@ android {
         aidl true
         buildConfig true
         compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion compose_compiler_version
     }
 }
 

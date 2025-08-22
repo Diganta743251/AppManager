@@ -29,6 +29,7 @@ import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import io.github.muntashirakon.AppManager.R;
 import io.github.muntashirakon.AppManager.logcat.struct.SavedLog;
 import io.github.muntashirakon.AppManager.logs.Log;
 import io.github.muntashirakon.AppManager.self.filecache.FileCache;

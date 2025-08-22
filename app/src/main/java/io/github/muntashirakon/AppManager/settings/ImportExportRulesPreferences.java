@@ -115,10 +115,8 @@ public class ImportExportRulesPreferences extends PreferenceFragment {
                 });
         ((Preference) Objects.requireNonNull(findPreference("quick_export")))
                 .setOnPreferenceClickListener(preference -> {
-                    // Launch rules type selection dialog without URI → triggers auto-routed Quick Export
-                    RulesTypeSelectionDialogFragment dialogFragment = RulesTypeSelectionDialogFragment
-                            .newQuickExportInstance(null, Users.getUsersIds());
-                    dialogFragment.show(getParentFragmentManager(), RulesTypeSelectionDialogFragment.TAG);
+                    // Launch Compose Quick Export screen for a modern M3 UI
+                    startActivity(new android.content.Intent(requireContext(), QuickExportComposeActivity.class));
                     return true;
                 });
         ((Preference) Objects.requireNonNull(findPreference("import")))

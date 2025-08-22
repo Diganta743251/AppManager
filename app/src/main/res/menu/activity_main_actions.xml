@@ -61,8 +61,23 @@
         android:title="@string/title_labs_activity" />
 
     <item
+        android:id="@+id/action_security_analysis"
+        android:icon="@drawable/ic_security"
+        android:title="@string/security_analysis" />
+
+    <item
+        android:id="@+id/action_privacy_protection"
+        android:icon="@drawable/ic_shield"
+        android:title="@string/privacy_protection" />
+
+    <item
         android:id="@+id/action_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/app_settings" />
+
+    <item
+        android:id="@+id/action_about"
+        android:icon="@drawable/ic_information"
+        android:title="About DeviceGuard Pro" />
 
 </menu>
